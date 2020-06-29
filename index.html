@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Website Ex1</title>
+    <script src="https://www.chartjs.org/dist/2.9.3/Chart.min.js"></script>
+    <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+  </head>
+  <body bgcolor="aqua">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="#">Smart Water Meter</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	    <div class="navbar-nav">
+	      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+	      <a class="nav-item nav-link" href="#">Volume Used</a>
+	      <a class="nav-item nav-link" href="#">Average Rate</a>
+	    </div>
+	  </div>
+	</nav>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+	     https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script>
+		<canvas id="myChart" width="400" height="180"></canvas> 
+  	<script>
+  		var date = [], volume = [], avgrate = [], waterGoal = [];
+		var firebaseConfig = {
+			    apiKey: "AIzaSyAi6gmXMgIU6lchdb5FoXOr8N7MwU1lph4",
+			    authDomain: "bluetooth-watermeter.firebaseapp.com",
+			    databaseURL: "https://bluetooth-watermeter.firebaseio.com",
+			    projectId: "bluetooth-watermeter",
+			    storageBucket: "bluetooth-watermeter.appspot.com",
+			    messagingSenderId: "581080021678",
+			    appId: "1:581080021678:web:104aa4eab29de0fe0acb3f",
+			    measurementId: "G-33920F286M"
+			  };
+			  // Initialize Firebase
+			  firebase.initializeApp(firebaseConfig);
+			  firebase.analytics();
+
+		var database = firebase.database();
+		
+
+
+			var i = 0;
+			var query = firebase.database().ref("/").orderByKey();
+			query.once("value")
+			  .then(function(snapshot) {
+			    snapshot.forEach(function(childSnapshot) {
+			      // key will be "ada" the first time and "alan" the second time
+			      var key = childSnapshot.key;
+			      // childData will be the actual contents of the child
+
+			      var childData = childSnapshot.val();
+			      date.push(childSnapshot.key);
+			      waterGoal.push(parseFloat(snapshot.child(key).child("WaterGoal").val()));
+			      avgrate.push(parseFloat(snapshot.child(key).child("avgFlow").val()));
+				  	volume.push(parseFloat(snapshot.child(key).child("waterUsage").val()));
+			      i++;
+			  });
+			});
+
+
+
+
+		console.log(date);
+		console.log(volume);
+		console.log(avgrate);
+		console.log(waterGoal);
+
+				var lineChartData = {
+					labels: date,
+					datasets: [{
+						label: 'Total Volume Used',
+						borderColor: window.chartColors.red,
+						backgroundColor: window.chartColors.red,
+						fill: false,
+						data: volume,
+						yAxisID: 'y-axis-1',
+					}, {
+						label: 'Daily Water Goal',
+						borderColor: window.chartColors.blue,
+						backgroundColor: window.chartColors.blue,
+						fill: false,
+						data: waterGoal,
+						yAxisID: 'y-axis-1'
+					}]
+				};
+
+				window.onload = function() {
+					var ctx = document.getElementById('myChart').getContext('2d');
+					window.myLine = Chart.Line(ctx, {
+						data: lineChartData,
+						options: {
+							responsive: true,
+							hoverMode: 'index',
+							stacked: false,
+							title: {
+								display: true,
+								text: 'Daily Water Usage'
+							},
+							scales: {
+								yAxes: [{
+									type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+									display: true,
+									position: 'left',
+									id: 'y-axis-1',
+									ticks: {
+				                      beginAtZero:true,
+				                      suggestedMax: 50
+				                    }
+								}],
+							}
+						}
+					});
+				};
+
+  	</script>
+
+
+
+  </body>
+</html>
