@@ -18,9 +18,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="#">Volume Used</a>
-        <a class="nav-item nav-link" href="#">Average Rate</a>
+         <a class="nav-item nav-link active" href="https://gurnameh-99.github.io/SmartWaterMeter/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="https://gurnameh-99.github.io/SmartWaterMeter/volume.html">Volume Used</a>
+        <a class="nav-item nav-link" href="https://gurnameh-99.github.io/SmartWaterMeter/rate.html">Average Rate</a>
       </div>
     </div>
   </nav>
@@ -111,10 +111,17 @@
                   id: 'y-axis-1',
                   ticks: {
                     beginAtZero:true,
-                    suggestedMax: 50
+                    suggestedMax: 50,
+                    callback: function(value, index, values) {
+                        return value + ' lit.';
+                      }
                   }
                 }],
-          }
+          },
+          title: {
+            display: true,
+            text: 'Water Usage and Goal'
+            }
         }
 
       });
