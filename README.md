@@ -15,12 +15,12 @@ The developed prototype provides features which helps in addressing all the abov
 # Hardware
 
 The components required are:
-> Arduino UNO/Nano | ESP8266
-> YFS201 flow meter
-> HC-05 Bluetooth module
-> OLED SSD1306 
-> Breadboard| PCB
-> Android smartphone
+>• Arduino UNO/Nano | ESP8266
+>• YFS201 flow meter
+>• HC-05 Bluetooth module
+>• OLED SSD1306 
+>• Breadboard| PCB
+>• Android smartphone
   
 The schematics and breadboard circuit designs are in the master branch.
 
